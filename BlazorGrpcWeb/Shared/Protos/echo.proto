@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "BlazorGrpcWeb.Protos";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+
+service EchoService {
+	rpc EchoMessage(EchoRequest) returns (EchoResponse);
+}
+
+message EchoRequest {
+	string name = 1;
+}
+
+message EchoResponse {
+	string name = 1;
+}

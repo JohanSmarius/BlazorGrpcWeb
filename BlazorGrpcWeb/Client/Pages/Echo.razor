@@ -1,0 +1,43 @@
+﻿@page "/echo"
+@using Grpc.Net.Client
+@using Grpc.Net.Client.Web
+@using BlazorGrpcWeb.Protos
+
+<h1>Counter</h1>
+
+<div class="form-group">
+    <label for="input">Text to send:</label>   
+    <input @bind="inputFromUser" class="form-control"/>
+</div>
+
+
+<button class="btn btn-primary" @onclick="OnSendMessage">Click me</button>
+
+
+@if (!string.IsNullOrEmpty(receivedFromServer))
+{
+    <div class="alert alert-success">@receivedFromServer</div>
+}
+
+
+@code {
+
+    private string inputFromUser = string.Empty;
+
+    private string receivedFromServer = string.Empty;
+
+    private async Task OnSendMessage()
+    {
+        var channel = GrpcChannel.ForAddress("https://blazorgrpcecho.azurewebsites.net/",
+            new GrpcChannelOptions
+            {
+                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+            });
+
+        var client = new EchoService.EchoServiceClient(channel);
+
+        var response = await client.EchoMessageAsync(new EchoRequest() {Name = inputFromUser});
+
+        receivedFromServer = response.Name;
+    }
+}

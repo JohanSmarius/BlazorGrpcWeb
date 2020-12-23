@@ -28,7 +28,7 @@
 
     private async Task OnSendMessage()
     {
-        var channel = GrpcChannel.ForAddress("https://blazorgrpcecho.azurewebsites.net/",
+        var channel = GrpcChannel.ForAddress("https://localhost:44350/",
             new GrpcChannelOptions
             {
                 HttpHandler = new GrpcWebHandler(new HttpClientHandler())

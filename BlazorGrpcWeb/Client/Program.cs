@@ -21,10 +21,16 @@ namespace BlazorGrpcWeb.Client
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddGrpcClient<EchoService.EchoServiceClient>((services, options) =>
-            {
+            builder.Services.AddGrpcClient<EchoService.EchoServiceClient>();
 
-                options.Address = new Uri("https://blazorgrpcecho.azurewebsites.net/");
+            builder.Services.AddGrpcClient<WeatherForecastService.WeatherForecastServiceClient>((services, options) =>
+            {
+                options.Address = new Uri("https://localhost:44350/");
+            }).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler()));
+
+            builder.Services.AddGrpcClient<WeatherForecastStreamingService.WeatherForecastStreamingServiceClient>((services, options) =>
+            {
+                options.Address = new Uri("https://localhost:44350/");
             }).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler()));
 
             await builder.Build().RunAsync();

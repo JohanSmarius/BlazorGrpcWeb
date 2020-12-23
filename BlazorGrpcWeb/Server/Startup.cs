@@ -55,6 +55,8 @@ namespace BlazorGrpcWeb.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<EchoServiceImpl>().EnableGrpcWeb();
+                endpoints.MapGrpcService<WeatherForecastServiceImpl>().EnableGrpcWeb();
+                endpoints.MapGrpcService<WeatherForecastStreamingServiceImpl>().EnableGrpcWeb();
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

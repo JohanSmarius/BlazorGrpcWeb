@@ -1,6 +1,8 @@
-﻿@page "/fetchdata"
+﻿@page "/fetchdatagrpc"
 @using BlazorGrpcWeb.Shared
-@inject HttpClient Http
+@using BlazorGrpcWeb.Protos
+@using Google.Protobuf.WellKnownTypes
+@inject WeatherForecastService.WeatherForecastServiceClient WeatherForecastClient
 
 <h1>Weather forecast</h1>
 
@@ -24,7 +26,7 @@ else
             @foreach (var forecast in forecasts)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.Date.ToDateTime().ToShortDateString()</td>
                     <td>@forecast.TemperatureC</td>
                     <td>@forecast.Summary</td>
                 </tr>
@@ -34,11 +36,16 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private WeatherForecastDTO[] forecasts;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+
+
+        var result = await WeatherForecastClient.GetForecastsAsync(new Empty());
+
+        forecasts = result.Forecasts.ToArray();
     }
 
 }

@@ -22,7 +22,8 @@ namespace BlazorGrpcWeb.Server.Services
             _logger = logger;
         }
 
-        public override async Task GetWeatherStream(Empty request, IServerStreamWriter<WeatherForecastStreamDTO> responseStream, ServerCallContext context)
+        public override async Task GetWeatherStream(Empty request, IServerStreamWriter<WeatherForecastStreamDTO> responseStream, 
+            ServerCallContext context)
         {
             var randomGenerator = new Random();
             var index = 0;

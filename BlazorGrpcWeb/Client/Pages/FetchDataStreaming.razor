@@ -10,7 +10,7 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (!forecasts.Any())
+@if (!_forecasts.Any())
 {
     <button @onclick="OnStartFetch">Start fetching</button>
 }
@@ -29,7 +29,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in _forecasts)
             {
                 <tr>
                     <td>@forecast.Date.ToDateTime().ToShortDateString()</td>
@@ -46,19 +46,19 @@ else
     [Inject]
     private WeatherForecastStreamingService.WeatherForecastStreamingServiceClient WeatherForecastClient { get; set; }
 
-    private List<WeatherForecastStreamDTO> forecasts = new List<WeatherForecastStreamDTO>();
+    private readonly List<WeatherForecastStreamDTO> _forecasts = new();
 
-    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     private async Task OnStartFetch()
     {
-        using var streamingCall = WeatherForecastClient.GetWeatherStream(new Empty(), cancellationToken: cancellationTokenSource.Token);
+        using var streamingCall = WeatherForecastClient.GetWeatherStream(new Empty(), cancellationToken: _cancellationTokenSource.Token);
 
         try
         {
-            await foreach (var weatherData in streamingCall.ResponseStream.ReadAllAsync(cancellationToken: cancellationTokenSource.Token))
+            await foreach (var weatherData in streamingCall.ResponseStream.ReadAllAsync(cancellationToken: _cancellationTokenSource.Token))
             {
-                forecasts.Add(weatherData);
+                _forecasts.Add(weatherData);
 
                 StateHasChanged();
             }
@@ -71,7 +71,7 @@ else
 
     private void OnStopFetch()
     {
-        cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Cancel();
     }
 
 

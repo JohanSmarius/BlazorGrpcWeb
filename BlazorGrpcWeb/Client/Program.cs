@@ -21,8 +21,6 @@ namespace BlazorGrpcWeb.Client
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddGrpcClient<EchoService.EchoServiceClient>();
-
             builder.Services.AddGrpcClient<WeatherForecastService.WeatherForecastServiceClient>((services, options) =>
             {
                 options.Address = new Uri("https://localhost:44350/");

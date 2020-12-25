@@ -64,3 +64,4 @@ namespace BlazorGrpcWeb.Server
         }
     }
 }
+

@@ -20,3 +20,5 @@ message WeatherForecastDTO
 message WeatherForecastResponse {
 	repeated WeatherForecastDTO Forecasts = 1;
 }
+
+
